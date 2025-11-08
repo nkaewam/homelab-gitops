@@ -3,10 +3,19 @@ additionalArguments:
       - "--api.dashboard=true"
       - "--api.insecure=true"
       - "--log.level=DEBUG"
+      - "--entrypoints.postgres.address=:5432"
+
 ingressRoute:
   dashboard:
     enabled: true
+
 ports:
+  postgres:
+    expose:
+      default: true
+    port: 5432
+    protocol: TCP
   traefik:
     expose:
       default: true
+    

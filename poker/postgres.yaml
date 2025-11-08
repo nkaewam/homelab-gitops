@@ -71,7 +71,7 @@ spec:
   type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
-kind: Ingress
+kind: IngressRouteTCP
 metadata:
   name: postgres-ingress
   namespace: poker
@@ -79,17 +79,13 @@ metadata:
     cert-manager.io/cluster-issuer: homelab-ca-issuer
 spec:
   ingressClassName: traefik
-  rules:
-    - host: poker-db.nkaewam.local
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: postgres-service
-                port:
-                  number: 5432
+  entryPoints:
+    - postgres
+  routes:
+    - match: HostSNI(`poker-db.nkaewam.local`)
+      services:
+        - name: postgres-service
+          port: 5432
   tls:
     - hosts:
         - poker-db.nkaewam.local
