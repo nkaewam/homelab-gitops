@@ -87,7 +87,9 @@ spec:
         - name: postgres-service
           port: 5432
   tls:
-    - hosts:
-        - poker-db.nkaewam.local
-      secretName: postgres-tls
+    secretName: postgres-tls
+    passthrough: false
+
+
+
 
