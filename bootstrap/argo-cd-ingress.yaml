@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-    name: argocd-ingress
+    name: argocd-ingress-local
     namespace: argocd
     annotations:
         cert-manager.io/cluster-issuer: homelab-ca-issuer
@@ -22,3 +22,22 @@ spec:
         - hosts:
               - argo-cd.nkaewam.local
           secretName: argo-cd-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: argocd-ingress-tunnel
+    namespace: argocd
+spec:
+    ingressClassName: cloudflare-tunnel
+    rules:
+        - host: argo-cd.nkaewam.dev
+          http:
+              paths:
+                  - path: /api
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: argocd-server
+                            port:
+                                number: 80
