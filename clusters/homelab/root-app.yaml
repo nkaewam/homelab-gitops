@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/KevinNitroG/argocd-json-schema/refs/heads/main/schemas/stable/standalone/v1alpha1application.json
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/nkaewam/homelab-gitops.git   # <-- change to your repo URL
+    path: clusters/homelab
+    targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+# The root app manages all other ArgoCD Applications
+# yaml-language-server: $schema=https://raw.githubusercontent.com/KevinNitroG/argocd-json-schema/refs/heads/main/schemas/stable/standalone/v1alpha1application.json
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: projects
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/nkaewam/homelab-gitops.git
+    path: apps/argocd-projects
+    targetRevision: main
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/KevinNitroG/argocd-json-schema/refs/heads/main/schemas/stable/standalone/v1alpha1application.json
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: system-apps
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/nkaewam/homelab-gitops.git
+    path: apps/system
+    targetRevision: main
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

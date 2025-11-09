@@ -1,0 +1,8 @@
+{
+    "yaml.schemaStore.url": "https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json",
+    "yaml.completion": true,
+    "yaml.validate": true,
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json": "file:///Users/nkaewam/Developer/homelab/apps/system/uptime-kuma/app.yaml"
+    }
+}

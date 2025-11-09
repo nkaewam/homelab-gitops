@@ -1,7 +1,6 @@
 # Default values for uptime-kuma.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
 image:
   repository: louislam/uptime-kuma
   pullPolicy: IfNotPresent
@@ -69,7 +68,6 @@ ingress:
           pathType: ImplementationSpecific
 
   tls:
-    []
     - secretName: uptime-kuma-tls
       hosts:
         - uptime-kuma.nkaewam.local
