@@ -55,7 +55,7 @@ service:
 
 ingress:
   enabled: true
-  # className: ""
+  
   extraLabels:
     {}
   
@@ -63,6 +63,8 @@ ingress:
 
   annotations:
     cert-manager.io/cluster-issuer: homelab-ca-issuer
+    kubernetes.io/ingress.class: traefik
+
   hosts:
     - host: uptime-kuma.nkaewam.local
       paths:
