@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: n8n-db-pvc
+  namespace: n8n
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,34 +18,40 @@ metadata:
 spec:
   replicas: 1
   selector:
-  matchLabels:
-  app: n8n-db
+    matchLabels:
+      app: n8n-db
   template:
-  metadata:
-  labels:
-    app:
-      n8n-db:
-      spec:
-        containers:
-          - name: n8n-db
-            image: postgres:16
-            env:
-              - name: POSTGRES_DB
-                value: n8n
-              - name: POSTGRES_USER
-                value: n8n
-              - name: POSTGRES_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: n8n-prod
-                    key: N8N_POSTGRES_PASSWORD
-            resources:
-              requests:
-                memory: "128Mi"
-                cpu: "100m"
-              limits:
-                memory: "256Mi"
-                cpu: "200m"
+    metadata:
+      labels:
+        app: n8n-db
+    spec:
+      containers:
+        - name: n8n-db
+          image: postgres:16
+          env:
+            - name: POSTGRES_DB
+              value: n8n
+            - name: POSTGRES_USER
+              value: n8n
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-prod
+                  key: N8N_POSTGRES_PASSWORD
+          volumeMounts:
+            - name: n8n-db-storage
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+      volumes:
+        - name: n8n-db-storage
+          persistentVolumeClaim:
+            claimName: n8n-db-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -43,7 +61,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-  app: n8n-db
+    app: n8n-db
   ports:
     - port: 5432
       targetPort: 5432
