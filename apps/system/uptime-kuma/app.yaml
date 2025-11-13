@@ -19,7 +19,7 @@ spec:
         ref: values
     helm:
       valueFiles:
-        - $values/apps/system/uptime-kuma/values.yaml
+        - $values/apps/system/uptime-kuma/templates/values.yaml
 
   destination:
     server: "https://kubernetes.default.svc"

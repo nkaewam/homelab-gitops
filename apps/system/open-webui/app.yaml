@@ -19,7 +19,7 @@ spec:
         ref: values
     helm:
       valueFiles:
-        - $values/apps/system/open-webui/values.yaml
+        - $values/apps/system/open-webui/templates/values.yaml
 
   destination:
     server: "https://kubernetes.default.svc"
